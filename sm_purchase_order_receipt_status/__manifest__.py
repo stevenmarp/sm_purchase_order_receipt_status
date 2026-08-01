@@ -43,7 +43,7 @@ overdue receipt, Odoo 19 purchase receipt.
     'author': 'Steven Marp',
     'website': 'https://apps.odoo.com/apps/modules/browse?author=Steven Marp',
     'license': 'OPL-1',
-    'price': 12.00,
+    'price': 5.00,
     'currency': 'USD',
     'depends': [
         'purchase_stock',
