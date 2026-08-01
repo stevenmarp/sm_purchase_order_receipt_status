@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="purchase_order_form_sm_receipt_status" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.sm.receipt.status</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <button name="button_draft" position="before">
+                <button name="action_view_internal_pickings"
+                        type="object"
+                        string="Input / Quality"
+                        groups="stock.group_stock_user"
+                        invisible="sm_receipt_status not in ('input_stock', 'quality_stock')"/>
+            </button>
+            <xpath expr="//field[@name='invoice_status']" position="after">
+                <field name="sm_receipt_status" widget="badge"
+                       decoration-success="sm_receipt_status == 'full'"
+                       decoration-warning="sm_receipt_status in ('partial', 'input_stock', 'quality_stock')"
+                       decoration-danger="sm_receipt_status == 'overdue'"
+                       decoration-info="sm_receipt_status == 'waiting'"
+                       invisible="not sm_receipt_status"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="purchase_order_view_tree_sm_receipt_status" model="ir.ui.view">
+        <field name="name">purchase.order.list.inherit.sm.receipt.status</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="invoice_status" position="after">
+                <field name="sm_receipt_status" widget="badge" optional="show"
+                       decoration-success="sm_receipt_status == 'full'"
+                       decoration-warning="sm_receipt_status in ('partial', 'input_stock', 'quality_stock')"
+                       decoration-danger="sm_receipt_status == 'overdue'"
+                       decoration-info="sm_receipt_status == 'waiting'"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="purchase_order_view_search_sm_receipt_status" model="ir.ui.view">
+        <field name="name">purchase.order.search.inherit.sm.receipt.status</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_view_search"/>
+        <field name="arch" type="xml">
+            <filter name="invoiced" position="after">
+                <separator/>
+                <filter name="sm_receipt_status_waiting" string="Waiting Receipt"
+                        domain="[('sm_receipt_status', '=', 'waiting')]"/>
+                <filter name="sm_receipt_status_input" string="Input Stock"
+                        domain="[('sm_receipt_status', '=', 'input_stock')]"/>
+                <filter name="sm_receipt_status_quality" string="Quality Stock"
+                        domain="[('sm_receipt_status', '=', 'quality_stock')]"/>
+                <filter name="sm_receipt_status_partial" string="Partially Received"
+                        domain="[('sm_receipt_status', '=', 'partial')]"/>
+                <filter name="sm_receipt_status_overdue" string="Receipt Overdue"
+                        domain="[('sm_receipt_status', '=', 'overdue')]"/>
+                <filter name="sm_receipt_status_full" string="Fully Received"
+                        domain="[('sm_receipt_status', '=', 'full')]"/>
+            </filter>
+        </field>
+    </record>
+
+</odoo>
